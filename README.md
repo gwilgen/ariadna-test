@@ -1,5 +1,7 @@
 # ariadna-test
 
+He subido [un video](https://youtu.be/qL7cqu1GDWI) en el que se ve la ejecución del resultado
+
 ## Requisitos
 
 La descripción de la prueba es la siguiente:
@@ -26,7 +28,13 @@ Las búsquedas por timestamp y rango de valor deberían ser lo mas eficientes qu
  - He supuesto que la consulta de tiemstamps es por rango (desde, hasta), que no es una lista con _exactamente_ los timestamps que tienen que ser
  - El valor supongo que es un número con decimales, y que puede ser negativo
  - Aunque el enunciado dice _aplicación Java_ considero que lo que hace falta es un servidor, que una vez levantado admita persistir eventos, o consultarlos.
- - He querido utilizar el framework de Spring, porque simplifica mucha lógica y te facilita seguir los principios SOLID
+ - He querido utilizar el framework de Spring, porque simplifica mucha lógica y te facilita seguir los principios [SOLID](https://es.wikipedia.org/wiki/SOLID)
+ - Para hacer eficientes las búsquedas (por timestamp o por valores) los aspectos a tener en cuenta serían:
+   - indexar esos campos (así las cláusulas where son más rápidas)
+   - escalar la base de datos:
+     - horizontal (e.g. separación física de la tabla de eventos por orígen y que sea el motor de base de datos el que haga las consultas en paralelo y mergee los resultados)
+     - vertical (utilizar un motor de base de datos o una máquina más potente)
+- No me he metido en tema de i18n porque lo considero fuera del alcance, pero en Spring es trivial (como lo sería por ejemplo en Angular)
  
 ### Enfoque
  - He creado 3 versiones: una apliación nativa de Java, un servidor de Spring, y una aplicación usando la infraestructura de Spring
@@ -73,3 +81,8 @@ Tiene básicamente 2 implementaciones (JPA y SQL), si bien la primera son 40 lí
  - RawSwingApp se encarga explícitamente de instanciar los servicios necesarios y se los pasa a la interfaz Swing
  - SpringSwingApp crea el ApplicationContext de Spring y después instancia la ventana (la misma que antes, se puede reutilizar por tener inversión de dependencias) y obtiene los servicios que considere Spring que son los adecuados en función de la configuración (e.g. el flag ariadna-data.type)
  - SpringWebApp levanta un servidor en localhost:8080 y mediante un navegador se accede a unas interfaces equivalentes a la versión Swing
+
+Para lanzarlo desde consola, serían de la siguiente forma:
+
+    mvn clean install spring-boot:run -Dstart-class=ariadna.SpringSwingApp
+    mvn clean install spring-boot:run -Dstart-class=ariadna.SpringWebApp
