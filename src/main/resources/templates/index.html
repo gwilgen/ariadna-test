@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+	<script
+		src="https://code.jquery.com/jquery-3.6.0.min.js"
+		integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+		crossorigin="anonymous"></script>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+	<script type="text/javascript">
+	
+		function createEvents() {
+			$.ajax({
+				url: 'api/createEvents',
+				dataType: 'json',
+				success: function(data) {
+					alert(`Creados ${data.count} eventos`);
+					location.reload(); // ugly way of rebinding ${numEvents}...
+				},
+				error: function() {
+					alert('No se han podido crear los eventos...');
+				}
+			})
+		}
+
+	</script>
+	<style type="text/css">
+		body {
+			margin: 10px;
+		}
+		
+		form {
+			margin: auto;
+			width: 80%;
+			padding-left: 10%;
+		}
+	</style>
+</head>
+<body>
+	<h1> Ariadna Test </h1>
+	<p> La base de datos contiene [[ ${numEvents} ]] registros de eventos </p>
+	<br/>
+	<h2> Opciones de búsqueda </h2>
+	<hr>
+	<form action="/web/timestamps">
+		<fieldset class="form-group">
+			<legend> Búsqueda en intervalo de tiempo </legend>
+			<label for="from"> Desde:
+				<input name="from" type="datetime" class="form-control"/>
+			</label>
+			<label for="to"> Hasta:
+				<input name="to" type="datetime" class="form-control" />
+			</label>
+			<input type="submit" value="Enviar" class="btn btn-primary"/>
+		</fieldset>
+	</form>
+	<hr>
+	<form action="/web/source">
+		<fieldset class="form-group">
+			<legend> Búsqueda en origen de eventos </legend>
+			<label for="id"> Origen:
+				<select name="id" class="form-control">
+					<option th:each="s: ${eventSources}" th:value="${s.id}">[[ ${s.name} ]]</option>
+				</select>
+			</label>
+			<input type="submit" value="Enviar" class="btn btn-primary"/>
+		</fieldset>
+	</form>
+	<hr>
+	<form action="/web/values">
+		<fieldset class="form-group">
+			<legend> Búsqueda en rango de valores </legend>
+			<label for="from"> Desde:
+				<input name="from" type="number" step="any" class="form-control" />
+			</label>
+			<label for="to"> Hasta:
+				<input name="to" type="number" step="any" class="form-control" />
+			</label>
+			<input type="submit" value="Enviar" class="btn btn-primary"/>
+		</fieldset>
+	</form>
+	<hr>
+	<h2> Acciones adicionales </h2>
+	<form action="/web/events">
+		<fieldset class="form-group">
+			<legend> Crear más registros de eventos (aleatorios) </legend>
+			<input type="submit" value="Crear" onclick="event.preventDefault(); createEvents()" class="btn btn-primary"/>
+		</fieldset>
+	</form>
+</body>
+</html>

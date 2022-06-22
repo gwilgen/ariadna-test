@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+	<script
+		src="https://code.jquery.com/jquery-3.6.0.min.js"
+		integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+		crossorigin="anonymous"></script>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+	<script type="text/javascript">
+	
+		let url = new URL(location.href)
+	
+		function getParams() {
+			let result = { page: 0 } // default value
+			for ([key, value] of url.searchParams.entries()) {
+				result[key] = value;
+			}
+			return result;
+		}
+	
+		function next() {
+			let params = getParams();
+			params['page']++;
+			navigate(params);
+		}
+		
+		function prev() {
+			let params = getParams();
+			params['page']--;
+			navigate(params);
+		}
+		
+		function navigate(params) {
+			window.location.replace(`${url.protocol}\/\/${url.host}${url.pathname}?${serialize(params)}`);
+		}
+		
+		function serialize(params) {
+			let result = '';
+			for ([key, value] of Object.entries(params)) {
+				if (result) {
+					result += '&';
+				}
+				result += `${key}=${value}`;
+			}
+			return result;
+		}
+	
+		function back() {
+			window.history.back();
+		}
+
+	</script>
+	<style type="text/css">
+		body {
+			margin: 10px;
+		}
+		
+		table {
+			margin: auto;
+			width: 80%;
+			padding-left: 10%;
+			margin-bottom: 10px;
+			border-collapse: collapse;
+			border-radius: 4px;
+			overflow: hidden;
+		}
+		thead {
+			background-color: #dedede;
+		}
+		tbody tr:nth-child(odd) {
+			background-color: #eeeeee;
+		}
+		th:first-child, td:first-child{
+			padding-left: 10px;
+		}
+		tr:hover {
+			cursor: pointer;
+			background-color: #6495ed !important;
+			color: white;
+		}
+		
+		.center {
+			margin: auto;
+			width: 50%;
+		}
+	</style>
+</head>
+<body>
+	<h1> Ariadna Test </h1>
+	<br/>
+	<h2> Resultados de búsqueda - página [[ ${page} ]] </h2>
+	<table>
+		<thead>
+			<tr>
+				<th>id</th>
+				<th>fuente_id</th>
+				<th>timestamp</th>
+				<th>valor</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="evt: ${events}">
+				<td>[[ ${evt.id} ]]</td>
+				<td>[[ ${evt.sourceId} ]]</td>
+				<td>[[ ${evt.timestamp} ]]</td>
+				<td>[[ ${evt.value} ]]</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class='center'>
+		<button onclick="prev()" th:disabled="${0 == page}" class="btn btn-default">Anterior</button>
+		<button onclick="next()" th:disabled="${20 != events.size()}" class="btn btn-default">Siguiente</button>
+		<button onclick="back()" class="btn btn-primary">Volver</button>
+	</div>
+	
+</body>
+</html>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beansProjectDescription>
+	<version>1</version>
+	<pluginVersion><![CDATA[3.9.8.201903260659-RELEASE]]></pluginVersion>
+	<configSuffixes>
+		<configSuffix><![CDATA[xml]]></configSuffix>
+	</configSuffixes>
+	<enableImports><![CDATA[false]]></enableImports>
+	<configs>
+		<config>java:ariadna.SpringSwingApp</config>
+	</configs>
+	<autoconfigs>
+		<config>java:ariadna.SpringWebApp</config>
+	</autoconfigs>
+	<configSets>
+	</configSets>
+</beansProjectDescription>
